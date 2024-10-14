@@ -67,7 +67,7 @@ jobs:
         run: pwd && ls .
       #Build docker image with Dockerfile and push to docker hub
       - name: Build docker images
-        run: docker build --no-cache -t ngorseck/thymeleaf-springboot:0.0.2 .
+        run: docker build --no-cache -t lamineniang99/hopital:0.0.1 .
       - name: show image
         run: docker image ls
       - name: log to docker hub
