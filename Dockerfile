@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 LABEL maintainer="Mohamadou Lamine NIANG <ton_email@example.com>"
 
 # Copie le fichier JAR généré dans l'image Docker
-COPY target/hopital-0.0.1.jar hopital.jar
+COPY hopital-0.0.1.jar hopital.jar
 
 # Définir le point d'entrée pour lancer l'application Java
 ENTRYPOINT ["java", "-jar", "hopital.jar"]
