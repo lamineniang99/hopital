@@ -2,7 +2,7 @@
 FROM openjdk:17-jdk-slim
 
 # Information sur le mainteneur de cette image
-LABEL maintainer="Mohamadou Lamine NIANG <ton_email@example.com>"
+LABEL maintainer="Mohamadou Lamine NIANG <pisupniang@example.com>"
 
 # Copie le fichier JAR généré dans l'image Docker
 COPY hopital-0.0.1.jar hopital.jar
