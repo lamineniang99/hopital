@@ -55,7 +55,7 @@ jobs:
 
       # Build Docker image and push to Docker Hub
       - name: Build Docker image
-        run: docker build --no-cache -t lamineniang99/hopital:0.0.1 .
+        run: docker build --no-cache -t lamineniang/hopital:0.0.1 .
 
       - name: Show Docker images
         run: docker image ls
@@ -69,6 +69,6 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_TOKEN }}
 
       - name: Push Docker image to DockerHub
-        run: docker push lamineniang99/hopital:0.0.1
+        run: docker push lamineniang/hopital:0.0.1
 
       - run: echo "🍏 Deploy job completed with status ${{ job.status }}."
