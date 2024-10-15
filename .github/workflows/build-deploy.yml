@@ -1,94 +1,69 @@
 name: build and deploy image
 on: [push]
-#on:
-#  push:
-#    branches: [ main, release ]
-#    paths-ignore:
-#      - '**/README.md'
 
 jobs:
-  #job 1
+  # Job 1: Build
   build:
     name: Build job
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+
       - name: Build with Maven
         run: mvn -B package -DskipTests
+
       - name: Create directory for Uploading artifacts
-        run: mkdir staging && cp target/*.jar staging
+        run: mkdir staging && cp target/hopital-0.0.1.jar staging/
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: package-final
+          name: hopital-jar
           path: staging
           if-no-files-found: error
           retention-days: 5
-      - name: Show Upload artifacts
+
+      - name: Show uploaded artifacts
         run: ls staging/
-      - run: echo "🍏 This job's status is ${{ job.status }}."
 
-  # job 2
-#  check-sonar:
-#    name: analysis job
-#    needs: build
-#    runs-on: ubuntu-latest
-#    steps:
-#      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-    #      - name: Sonar analysis
-    #        run: |
-    #          mvn clean verify sonar:sonar \
-    #          -Dsonar.projectKey=thymelaef1 \
-    #          -Dsonar.projectName='thymelaef1' \
-    #          -Dsonar.host.url=http://localhost:9000 \
-    #          -Dsonar.token=sqp_afd0642fc8bf0fe442190f85ed57ce2bb4f8a1f4
+      - run: echo "🍏 Build job completed with status ${{ job.status }}."
 
-  #job 3
+  # Job 2: Deploy
   deploy:
-    name: deploy job
-    needs: [build]
+    name: Deploy job
+    needs: build
     runs-on: ubuntu-latest
     steps:
-      # checkout project to get Dockerfile
       - name: Checkout code
         uses: actions/checkout@v4
-      #Get artifact from build JOB
-      - name: Download a single artifact
+
+      # Download the JAR artifact generated from the build job
+      - name: Download JAR artifact
         uses: actions/download-artifact@v4
         with:
-          name: package-final
-      - name: Show downloaded artifacts directory
-        run: pwd && ls .
-      #Build docker image with Dockerfile and push to docker hub
-      - name: Build docker images
+          name: hopital-jar
+
+      - name: Show downloaded artifacts
+        run: ls .
+
+      # Build Docker image and push to Docker Hub
+      - name: Build Docker image
         run: docker build --no-cache -t lamineniang99/hopital:0.0.1 .
-      - name: show image
+
+      - name: Show Docker images
         run: docker image ls
-      - name: log to docker hub
+
+      - name: Log in to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_TOKEN }}
-      - name: push image to docker hub
-        run: docker push laminenian/hopital:0.0.1
-      - run: echo "🍏 This job's status is ${{ job.status }}."
 
-      #Build docker image with Docker compose and push to docker hub
-      #      - name: Build docker images
-      #        run: docker compose build
-      #      - name: log to docker hub
-      #        run: docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
-      #      - name: tag image
-      #        run: docker tag thymeleaf-springboot:0.0.1 ngorseck/thymeleaf-springboot:0.0.1
-      #      - name: push to docker hub tests
-      #        run: docker push ngorseck/thymeleaf-springboot:0.0.1
+      - name: Push Docker image to Docker Hub
+        run: docker push lamineniang99/hopital:0.0.1
 
-      #Build docker image with maven and push to docker hub
-#      - name: Publish to Docker
-#        run: |
-#          mvn -B spring-boot:build-image -Dspring-boot.build-image.publish=true \
-#          -Ddocker.user=${{ secrets.DOCKER_HUB_USER }} -Ddocker.token=${{ secrets.DOCKER_HUB_TOKEN }} \
-#          -DskipTests
+      - run: echo "🍏 Deploy job completed with status ${{ job.status }}."
