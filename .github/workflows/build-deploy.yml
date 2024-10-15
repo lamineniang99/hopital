@@ -60,6 +60,11 @@ jobs:
       - name: Show Docker images
         run: docker image ls
 
+      - name: check credential
+        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
+
+
+
       - name: Log in to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_TOKEN }}
 
