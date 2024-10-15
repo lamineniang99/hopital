@@ -60,7 +60,7 @@ jobs:
       - name: Show Docker images
         run: docker image ls
 
-      - name: check credential
+      - name: print the credential in the stdin
         run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
 
 
