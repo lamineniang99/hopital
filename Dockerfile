@@ -11,4 +11,4 @@ COPY hopital-0.0.1.jar hopital.jar
 ENTRYPOINT ["java", "-jar", "hopital.jar"]
 
 # Exposer le port 8080
-EXPOSE 8080
+EXPOSE 8082
